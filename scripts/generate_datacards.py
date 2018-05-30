@@ -1,10 +1,21 @@
+#!/usr/bin/env python
+from core.DataCard import DataCard
 from rootpy.io import root_open
 from collections import namedtuple
 from collections import OrderedDict as odict
 import os
 import yaml
+import argparse
 
-from core.DataCard import DataCard
+def parse_args():
+    parser = argparse.ArgumentParser(description="e.g. python generate_datacards -i input.yaml -o datacards/")
+
+    parser.add_argument('-i', '--input-yaml', action='store',
+                        help="Input yaml file with the input root file structure")
+    parser.add_argument('-o', '--outdir', action='store',
+                        help="Output directory for the datacards")
+
+    return parser.parse_args()
 
 def setup_regions(config_path):
     Inputs = namedtuple('Inputs', ['regions'])
@@ -60,10 +71,12 @@ def setup_regions(config_path):
     return Inputs(regions = regions)
 
 if __name__ == "__main__":
-    inputs = setup_regions("/vols/build/cms/sdb15/ZinvWidth/HiggsCombine/ZinvCombine/data/inputs.yaml")
+    options = parse_args()
+    inputs = setup_regions(options.input_yaml)
+    outdir = options.outdir
 
     # Monojet
-    dc = DataCard("test_monojet.txt")
+    dc = DataCard(os.path.join(outdir, "monojet.txt"))
     dc.add_region("monojet", inputs.regions["monojet"].processes["data"].content)
     for idx, proc in enumerate(["znunu", "wlnu", "bkg"]):
         nominal = inputs.regions["monojet"].processes[proc].content
@@ -91,7 +104,7 @@ if __name__ == "__main__":
     dc.write()
 
     # Single Muon
-    dc = DataCard("test_singlemu.txt")
+    dc = DataCard(os.path.join(outdir, "singlemu.txt"))
     dc.add_region("singlemu", inputs.regions["singlemu"].processes["data"].content)
     for idx, proc in odict([(1, "wlnu"), (2, "bkg")]).items():
         nominal = inputs.regions["singlemu"].processes[proc].content
@@ -124,7 +137,7 @@ if __name__ == "__main__":
     dc.write()
 
     # Double Muon
-    dc = DataCard("test_doublemu.txt")
+    dc = DataCard(os.path.join(outdir, "doublemu.txt"))
     dc.add_region("doublemu", inputs.regions["doublemu"].processes["data"].content)
     for idx, proc in odict([(0, "dymumu"), (1, "bkg")]).items():
         nominal = inputs.regions["doublemu"].processes[proc].content

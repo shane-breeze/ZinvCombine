@@ -13,4 +13,5 @@ cd $CMSSW_BASE/src
 eval `scramv1 runtime -sh`
 cd $cwd
 
+PATH=${PATH}:${cwd}/scripts
 PYTHONPATH=${PYTHONPATH}:${cwd}

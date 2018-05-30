@@ -2,6 +2,20 @@
 
 Code to write combine datacards and run combine for the zinv width analysis
 
+## Creating datacards
+
+To create the datacards for use with the combine tool we need the input
+root files from AlphaTools which have distributions for all regions and
+relevant processes, including variations under systematic uncertainties. In the
+same directory as all of these root files create a yaml file that encodes the
+structure in a nested dictionary with the following keys:
+region, process, content/systs, name, up/down. An example is shown in the
+example directory. Using this yaml file we can create the datacards by running
+the following command:
+```
+generate_datacards.py -i examples/standard_analysis/inputs.yaml -o datacards/
+```
+
 ## Combine tool
 
 ### FitDiagnostics

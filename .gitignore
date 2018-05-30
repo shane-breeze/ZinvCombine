@@ -1,5 +1,6 @@
 inputs/*
 
+*.pyc
 *.pdf
 *.png
 *.root
