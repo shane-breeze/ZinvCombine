@@ -1,0 +1,105 @@
+monojet:
+    data:
+        content: "Monojet.root:systematicsAnalyzer/MET_Run2016/metNoX_pt"
+    znunu:
+        content: "Monojet.root:systematicsAnalyzer/ZJetsToNuNu/metNoX_pt"
+        systs:
+            pu:
+                up: "Monojet.root:systematicsAnalyzer/ZJetsToNuNu/metNoX_pt_puWeight_Up"
+                down: "Monojet.root:systematicsAnalyzer/ZJetsToNuNu/metNoX_pt_puWeight_Down"
+            metTrig0muSF:
+                up: "Monojet.root:systematicsAnalyzer/ZJetsToNuNu/metNoX_pt_metTrig0muSFWeight_Up"
+                down: "Monojet.root:systematicsAnalyzer/ZJetsToNuNu/metNoX_pt_metTrig0muSFWeight_Down"
+            jec:
+                up: "MonojetJECUp.root:systematicsAnalyzer/ZJetsToNuNu/metNoX_pt"
+                down: "MonojetJECDown.root:systematicsAnalyzer/ZJetsToNuNu/metNoX_pt"
+    wlnu:
+        content: "Monojet.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt"
+        systs:
+            pu:
+                up: "Monojet.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt_puWeight_Up"
+                down: "Monojet.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt_puWeight_Down"
+            metTrig0muSF:
+                up: "Monojet.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt_metTrig0muSFWeight_Up"
+                down: "Monojet.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt_metTrig0muSFWeight_Down"
+            jec:
+                up: "MonojetJECUp.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt"
+                down: "MonojetJECDown.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt"
+    bkg:
+        content: "Monojet.root:systematicsAnalyzer/Monojet_bkg/metNoX_pt"
+        systs:
+            pu:
+                up: "Monojet.root:systematicsAnalyzer/Monojet_bkg/metNoX_pt_puWeight_Up"
+                down: "Monojet.root:systematicsAnalyzer/Monojet_bkg/metNoX_pt_puWeight_Down"
+            metTrig0muSF:
+                up: "Monojet.root:systematicsAnalyzer/Monojet_bkg/metNoX_pt_metTrig0muSFWeight_Up"
+                down: "Monojet.root:systematicsAnalyzer/Monojet_bkg/metNoX_pt_metTrig0muSFWeight_Down"
+            jec:
+                up: "MonojetJECUp.root:systematicsAnalyzer/Monojet_bkg/metNoX_pt"
+                down: "MonojetJECDown.root:systematicsAnalyzer/Monojet_bkg/metNoX_pt"
+singlemu:
+    data:
+        content: "SingleMuMET.root:systematicsAnalyzer/MET_Run2016/metNoX_pt"
+    wlnu:
+        content: "SingleMuMET.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt"
+        systs:
+            pu:
+                up: "SingleMuMET.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt_puWeight_Up"
+                down: "SingleMuMET.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt_puWeight_Down"
+            metTrig1muSF:
+                up: "SingleMuMET.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt_metTrig1muSFWeight_Up"
+                down: "SingleMuMET.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt_metTrig1muSFWeight_Down"
+            muonSF:
+                up: "SingleMuMET.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt_muonSFWeight_Up"
+                down: "SingleMuMET.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt_muonSFWeight_Down"
+            jec:
+                up: "SingleMuMETJECUp.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt"
+                down: "SingleMuMETJECDown.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt"
+    bkg:
+        content: "SingleMuMET.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt"
+        systs:
+            pu:
+                up: "SingleMuMET.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt_puWeight_Up"
+                down: "SingleMuMET.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt_puWeight_Down"
+            metTrig1muSF:
+                up: "SingleMuMET.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt_metTrig1muSFWeight_Up"
+                down: "SingleMuMET.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt_metTrig1muSFWeight_Down"
+            muonSF:
+                up: "SingleMuMET.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt_muonSFWeight_Up"
+                down: "SingleMuMET.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt_muonSFWeight_Down"
+            jec:
+                up: "SingleMuMETJECUp.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt"
+                down: "SingleMuMETJECDown.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt"
+doublemu:
+    data:
+        content: "DoubleMuMET.root:systematicsAnalyzer/MET_Run2016/metNoX_pt"
+    dymumu:
+        content: "DoubleMuMET.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt"
+        systs:
+            pu:
+                up: "DoubleMuMET.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt_puWeight_Up"
+                down: "DoubleMuMET.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt_puWeight_Down"
+            metTrig2muSF:
+                up: "DoubleMuMET.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt_metTrig2muSFWeight_Up"
+                down: "DoubleMuMET.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt_metTrig2muSFWeight_Down"
+            muonSF:
+                up: "DoubleMuMET.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt_muonSFWeight_Up"
+                down: "DoubleMuMET.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt_muonSFWeight_Down"
+            jec:
+                up: "DoubleMuMETJECUp.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt"
+                down: "DoubleMuMETJECDown.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt"
+    bkg:
+        content: "DoubleMuMET.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt"
+        systs:
+            pu:
+                up: "DoubleMuMET.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt_puWeight_Up"
+                down: "DoubleMuMET.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt_puWeight_Down"
+            metTrig2muSF:
+                up: "DoubleMuMET.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt_metTrig2muSFWeight_Up"
+                down: "DoubleMuMET.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt_metTrig2muSFWeight_Down"
+            muonSF:
+                up: "DoubleMuMET.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt_muonSFWeight_Up"
+                down: "DoubleMuMET.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt_muonSFWeight_Down"
+            jec:
+                up: "DoubleMuMETJECUp.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt"
+                down: "DoubleMuMETJECDown.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt"
