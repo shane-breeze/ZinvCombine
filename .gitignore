@@ -5,3 +5,5 @@ inputs/*
 *.png
 *.root
 *.txt
+*.out
+*.json
