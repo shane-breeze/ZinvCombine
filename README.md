@@ -71,6 +71,31 @@ where the 2 POIs are defined as `r_nunu` and `r_mumu`.
 ### Impacts
 
 To see the impacts of the systematics on the POI run the `scripts/impacts.sh`
+like so:
+```
+sh scripts/impacts.sh zinv.root
+```
+
+This will run a set of commands successively, so be wary if any step fails.
+
+### ML Fit
+
+The `mlfit.sh` script takes a workspace as an argument and performs a standard
+maximum likelihood fit with 1 POI (typically the signal strength modifier). The
+command that's ran is:
+```
+combine zinv.root -n Zinv -m 91 -M FitDiagnostics --forceRecreateNLL --saveNLL --plots --saveNormalizations --saveWithUncertainties --expectSignal 1
+```
+
+### NLL scan
+
+A NLL scan of the POI can be done by running the `llscan.sh` script on a
+workspace. This runs the following commands:
+```
+combine -M MultiDimFit --algo grid --points 100 --rMin 0.9 --rMax 1.3 zinv.root -m 91 -n ZinvLLScan --expectSignal 1
+plot1DScan.py higgsCombineZinvLLScan.MultiDimFit.mH91.root
+```
+
 
 # Combine tool
 
