@@ -16,25 +16,20 @@ the following command:
 generate_datacards.py -i examples/standard_analysis/inputs.yaml -o datacards/
 ```
 
-This will create 3 datacards: monojet, singlemu and doublemu. We want to combine
-these into a single datacard for a combined fit. This can be done with the
-following command:
+This will create a datacard for the whole analysis including the transfer factor
+for W+jets from the Single Muon region to the Monojet region, and the rate
+parameter function for the Z inv. signal strength
 ```
-combineCards.py monojet=monojet.txt singlemu=singlemu.txt doublemu=doublemu.txt > zinv.txt
+r_nunu = r * r_mumu
 ```
-
-If we want to probe the ratio of branching fractions of Z to inv. and Z to mumu
-we want to add rate parameters to this new file `zinv.txt` defined by
-```
-r_mumu = r * r_nunu
-```
-where `r_mumu` is the signal strength modifier for Z to mumu, `r_nunu` is the
-signal strength modifier for Z to inv. and `r` is our new parameter of interest,
-our ratio. We need to create a freely floating rate parameter `r_nunu` like so:
+where `r_mumu` is the signal strength modifier for Z to mumu and `r` is our new
+parameter of interest: our ratio. This require the freely floating rate
+parameter `r_mumu`, defined in the datacard by
 ```
 r_nunu rateParam monojet znunu 1
 ```
-and we want to define the equation above with another rate parameter:
+and we want to define the equation above with another rate parameter, defined in
+the datacard by
 ```
 r_mumu rateParam doublemu dymumu (@0*@1) r,r_nunu
 ```

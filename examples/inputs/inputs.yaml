@@ -13,6 +13,10 @@ monojet:
             jec:
                 up: "MonojetJECUp.root:systematicsAnalyzer/ZJetsToNuNu/metNoX_pt"
                 down: "MonojetJECDown.root:systematicsAnalyzer/ZJetsToNuNu/metNoX_pt"
+    znunu_genmll:
+        content: "ZJetsToNuNu_genMll.root:systematicsAnalyzer/ZJetsToNuNu/metNoX_pt"
+    znunu_genmll_nocuts:
+        content: "ZJetsToNuNu_genMll_nocuts.root:systematicsAnalyzer/ZJetsToNuNu/metNoX_pt"
     wlnu:
         content: "Monojet.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt"
         systs:
@@ -25,6 +29,18 @@ monojet:
             jec:
                 up: "MonojetJECUp.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt"
                 down: "MonojetJECDown.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt"
+    qcd:
+        content: "Monojet.root:systematicsAnalyzer/QCD_Pt/metNoX_pt"
+        systs:
+            pu:
+                up: "Monojet.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_puWeight_Up"
+                down: "Monojet.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_puWeight_Down"
+            metTrig0muSF:
+                up: "Monojet.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_metTrig0muSFWeight_Up"
+                down: "Monojet.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_metTrig0muSFWeight_Down"
+            jec:
+                up: "MonojetJECUp.root:systematicsAnalyzer/QCD_Pt/metNoX_pt"
+                down: "MonojetJECDown.root:systematicsAnalyzer/QCD_Pt/metNoX_pt"
     bkg:
         content: "Monojet.root:systematicsAnalyzer/Monojet_bkg/metNoX_pt"
         systs:
@@ -49,12 +65,39 @@ singlemu:
             metTrig1muSF:
                 up: "SingleMuMET.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt_metTrig1muSFWeight_Up"
                 down: "SingleMuMET.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt_metTrig1muSFWeight_Down"
-            muonSF:
-                up: "SingleMuMET.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt_muonSFWeight_Up"
-                down: "SingleMuMET.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt_muonSFWeight_Down"
+            muonIsoSF:
+                up: "SingleMuMET.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt_muonIsoSFWeight_Up"
+                down: "SingleMuMET.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt_muonIsoSFWeight_Down"
+            muonIdSF:
+                up: "SingleMuMET.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt_muonIdSFWeight_Up"
+                down: "SingleMuMET.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt_muonIdSFWeight_Down"
+            muonTrackSF:
+                up: "SingleMuMET.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt_muonTrackSFWeight_Up"
+                down: "SingleMuMET.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt_muonTrackSFWeight_Down"
             jec:
                 up: "SingleMuMETJECUp.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt"
                 down: "SingleMuMETJECDown.root:systematicsAnalyzer/WJetsToLNu/metNoX_pt"
+    qcd:
+        content: "SingleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt"
+        systs:
+            pu:
+                up: "SingleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_puWeight_Up"
+                down: "SingleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_puWeight_Down"
+            metTrig1muSF:
+                up: "SingleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_metTrig1muSFWeight_Up"
+                down: "SingleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_metTrig1muSFWeight_Down"
+            muonIsoSF:
+                up: "SingleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_muonIsoSFWeight_Up"
+                down: "SingleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_muonIsoSFWeight_Down"
+            muonIdSF:
+                up: "SingleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_muonIdSFWeight_Up"
+                down: "SingleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_muonIdSFWeight_Down"
+            muonTrackSF:
+                up: "SingleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_muonTrackSFWeight_Up"
+                down: "SingleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_muonTrackSFWeight_Down"
+            jec:
+                up: "SingleMuMETJECUp.root:systematicsAnalyzer/QCD_Pt/metNoX_pt"
+                down: "SingleMuMETJECDown.root:systematicsAnalyzer/QCD_Pt/metNoX_pt"
     bkg:
         content: "SingleMuMET.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt"
         systs:
@@ -64,9 +107,15 @@ singlemu:
             metTrig1muSF:
                 up: "SingleMuMET.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt_metTrig1muSFWeight_Up"
                 down: "SingleMuMET.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt_metTrig1muSFWeight_Down"
-            muonSF:
-                up: "SingleMuMET.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt_muonSFWeight_Up"
-                down: "SingleMuMET.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt_muonSFWeight_Down"
+            muonIsoSF:
+                up: "SingleMuMET.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt_muonIsoSFWeight_Up"
+                down: "SingleMuMET.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt_muonIsoSFWeight_Down"
+            muonIdSF:
+                up: "SingleMuMET.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt_muonIdSFWeight_Up"
+                down: "SingleMuMET.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt_muonIdSFWeight_Down"
+            muonTrackSF:
+                up: "SingleMuMET.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt_muonTrackSFWeight_Up"
+                down: "SingleMuMET.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt_muonTrackSFWeight_Down"
             jec:
                 up: "SingleMuMETJECUp.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt"
                 down: "SingleMuMETJECDown.root:systematicsAnalyzer/SingleMu_bkg/metNoX_pt"
@@ -82,12 +131,43 @@ doublemu:
             metTrig2muSF:
                 up: "DoubleMuMET.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt_metTrig2muSFWeight_Up"
                 down: "DoubleMuMET.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt_metTrig2muSFWeight_Down"
-            muonSF:
-                up: "DoubleMuMET.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt_muonSFWeight_Up"
-                down: "DoubleMuMET.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt_muonSFWeight_Down"
+            muonIsoSF:
+                up: "DoubleMuMET.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt_muonIsoSFWeight_Up"
+                down: "DoubleMuMET.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt_muonIsoSFWeight_Down"
+            muonIdSF:
+                up: "DoubleMuMET.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt_muonIdSFWeight_Up"
+                down: "DoubleMuMET.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt_muonIdSFWeight_Down"
+            muonTrackSF:
+                up: "DoubleMuMET.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt_muonTrackSFWeight_Up"
+                down: "DoubleMuMET.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt_muonTrackSFWeight_Down"
             jec:
                 up: "DoubleMuMETJECUp.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt"
                 down: "DoubleMuMETJECDown.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt"
+    dymumu_genmll:
+        content: "DYJetsToMuMu_genMll.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt"
+    dymumu_genmll_nocuts:
+        content: "DYJetsToMuMu_genMll_nocuts.root:systematicsAnalyzer/DYJetsToMuMu/metNoX_pt"
+    qcd:
+        content: "DoubleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt"
+        systs:
+            pu:
+                up: "DoubleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_puWeight_Up"
+                down: "DoubleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_puWeight_Down"
+            metTrig2muSF:
+                up: "DoubleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_metTrig2muSFWeight_Up"
+                down: "DoubleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_metTrig2muSFWeight_Down"
+            muonIsoSF:
+                up: "DoubleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_muonIsoSFWeight_Up"
+                down: "DoubleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_muonIsoSFWeight_Down"
+            muonIdSF:
+                up: "DoubleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_muonIdSFWeight_Up"
+                down: "DoubleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_muonIdSFWeight_Down"
+            muonTrackSF:
+                up: "DoubleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_muonTrackSFWeight_Up"
+                down: "DoubleMuMET.root:systematicsAnalyzer/QCD_Pt/metNoX_pt_muonTrackSFWeight_Down"
+            jec:
+                up: "DoubleMuMETJECUp.root:systematicsAnalyzer/QCD_Pt/metNoX_pt"
+                down: "DoubleMuMETJECDown.root:systematicsAnalyzer/QCD_Pt/metNoX_pt"
     bkg:
         content: "DoubleMuMET.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt"
         systs:
@@ -97,9 +177,15 @@ doublemu:
             metTrig2muSF:
                 up: "DoubleMuMET.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt_metTrig2muSFWeight_Up"
                 down: "DoubleMuMET.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt_metTrig2muSFWeight_Down"
-            muonSF:
-                up: "DoubleMuMET.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt_muonSFWeight_Up"
-                down: "DoubleMuMET.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt_muonSFWeight_Down"
+            muonIsoSF:
+                up: "DoubleMuMET.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt_muonIsoSFWeight_Up"
+                down: "DoubleMuMET.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt_muonIsoSFWeight_Down"
+            muonIdSF:
+                up: "DoubleMuMET.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt_muonIdSFWeight_Up"
+                down: "DoubleMuMET.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt_muonIdSFWeight_Down"
+            muonTrackSF:
+                up: "DoubleMuMET.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt_muonTrackSFWeight_Up"
+                down: "DoubleMuMET.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt_muonTrackSFWeight_Down"
             jec:
                 up: "DoubleMuMETJECUp.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt"
                 down: "DoubleMuMETJECDown.root:systematicsAnalyzer/DoubleMu_bkg/metNoX_pt"
