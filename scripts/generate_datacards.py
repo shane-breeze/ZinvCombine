@@ -6,6 +6,7 @@ from collections import OrderedDict as odict
 import os
 import yaml
 import argparse
+import numpy as np
 
 def parse_args():
     parser = argparse.ArgumentParser(description="e.g. python generate_datacards -i input.yaml -o datacards/")
@@ -17,7 +18,7 @@ def parse_args():
 
     return parser.parse_args()
 
-def setup_regions(config_path):
+def setup_regions(config_path, xlow=None):
     Inputs = namedtuple('Inputs', ['regions'])
     Region = namedtuple('Region', ['processes'])
     Process = namedtuple('Process', ['content', 'stats', 'systs'])
@@ -32,10 +33,24 @@ def setup_regions(config_path):
         return hist
 
     def hist_to_value(hist, stats=False):
-        if stats:
-            return hist.integral(overflow=True, error=True)[1]
+        if xlow is not None:
+            indices = [b.idx for b in hist if b.x.low >= xlow]
         else:
-            return hist.integral(overflow=True)
+            indices = [0, len(hist)-1]
+
+        if stats:
+            return hist.integral(
+                xbin1=min(indices),
+                xbin2=max(indices),
+                overflow=True,
+                error=True,
+            )[1]
+        else:
+            return hist.integral(
+                xbin1=min(indices),
+                xbin2=max(indices),
+                overflow=True,
+            )
 
     def get(*args):
         return hist_to_value(get_hist(*args))
@@ -77,13 +92,11 @@ def setup_regions(config_path):
         regions[region] = Region(processes = processes)
     return Inputs(regions = regions)
 
-if __name__ == "__main__":
-    options = parse_args()
-    inputs = setup_regions(options.input_yaml)
-    outdir = options.outdir
+def create_datacards(input_yaml, xlow, outfile):
+    inputs = setup_regions(input_yaml, xlow=xlow)
 
     # Monojet
-    dc = DataCard(os.path.join(outdir, "zinv.txt"))
+    dc = DataCard(outfile)
     dc.add_region("monojet", inputs.regions["monojet"].processes["data"].content)
     for idx, proc in enumerate(["znunu", "wlnu", "qcd", "bkg"]):
         nominal = inputs.regions["monojet"].processes[proc].content
@@ -218,3 +231,15 @@ if __name__ == "__main__":
         "CMS_qcd",
     ])
     dc.write()
+
+if __name__ == "__main__":
+    options = parse_args()
+    input_yaml = options.input_yaml
+    outdir = options.outdir
+
+    for met_threshold in np.linspace(250., 1000., 16):
+        create_datacards(
+            input_yaml,
+            met_threshold,
+            os.path.join(outdir, "zinv_met-{}.txt".format(int(met_threshold))),
+        )
