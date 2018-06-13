@@ -120,8 +120,8 @@ def create_datacards(input_yaml, xlow, outfile):
         dc.add_systematic("monojet", proc, "CMS_puReweight", "lnN", 1+(abs(pu_up-1)+abs(1-pu_down))/2)
 
         # MET trigger
-        met_up = inputs.regions["monojet"].processes[proc].systs["metTrig0muSF"].up / nominal
-        met_down = inputs.regions["monojet"].processes[proc].systs["metTrig0muSF"].down / nominal
+        met_up = inputs.regions["monojet"].processes[proc].systs["metTrigSF"].up / nominal
+        met_down = inputs.regions["monojet"].processes[proc].systs["metTrigSF"].down / nominal
         dc.add_systematic("monojet", proc, "CMS_metTrigSF", "lnN", 1+(abs(met_up-1)+abs(1-met_down))/2)
 
         # JECs
@@ -165,8 +165,8 @@ def create_datacards(input_yaml, xlow, outfile):
         dc.add_systematic("singlemu", proc, "CMS_muonTrackSF", "lnN", 1+(abs(muon_up-1)+abs(1-muon_down))/2)
 
         # MET trigger
-        met_up = inputs.regions["singlemu"].processes[proc].systs["metTrig1muSF"].up / nominal
-        met_down = inputs.regions["singlemu"].processes[proc].systs["metTrig1muSF"].down / nominal
+        met_up = inputs.regions["singlemu"].processes[proc].systs["metTrigMuSF"].up / nominal
+        met_down = inputs.regions["singlemu"].processes[proc].systs["metTrigMuSF"].down / nominal
         dc.add_systematic("singlemu", proc, "CMS_metTrigMuSF", "lnN", 1+(abs(met_up-1)+abs(1-met_down))/2)
 
         # JECs
@@ -212,8 +212,8 @@ def create_datacards(input_yaml, xlow, outfile):
         dc.add_systematic("doublemu", proc, "CMS_muonTrackSF", "lnN", 1+(abs(muon_up-1)+abs(1-muon_down))/2)
 
         # MET trigger
-        met_up = inputs.regions["doublemu"].processes[proc].systs["metTrig2muSF"].up / nominal
-        met_down = inputs.regions["doublemu"].processes[proc].systs["metTrig2muSF"].down / nominal
+        met_up = inputs.regions["doublemu"].processes[proc].systs["metTrigMuSF"].up / nominal
+        met_down = inputs.regions["doublemu"].processes[proc].systs["metTrigMuSF"].down / nominal
         dc.add_systematic("doublemu", proc, "CMS_metTrigMuSF", "lnN", 1+(abs(met_up-1)+abs(1-met_down))/2)
 
         # JECs
