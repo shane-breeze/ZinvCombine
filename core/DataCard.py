@@ -11,6 +11,7 @@ class DataCard(object):
         self.regions = odict()
         self.systematics = odict()
         self.rate_params = []
+        self.params = []
 
     def add_region(self, region, obs):
         self.regions[region] = Region(str(obs), odict())
@@ -23,6 +24,11 @@ class DataCard(object):
         if systematic not in self.systematics:
             self.systematics[systematic] = pdf
         self.regions[region].processes[process].systematics[systematic] = Systematic(value)
+
+    def add_param(self, param, central, sigma):
+        self.params.append(
+            [param, "param", str(central), str(sigma)],
+        )
 
     def add_rateparam(self, param, region, process, value, *args):
         additional_args = ""
@@ -116,6 +122,10 @@ class DataCard(object):
         ]
         return self.format_lines(lines)
 
+    def textblock_params(self):
+        lines = [param for param in self.params]
+        return self.format_lines(lines)
+
     def textblock_rate_params(self):
         """
         e.g.
@@ -147,6 +157,7 @@ class DataCard(object):
             self.textblock_break(),
             self.textblock_systs(),
             self.textblock_break(),
+            self.textblock_params(),
             self.textblock_rate_params(),
         ])
         with open(self.filename, 'w') as f:
@@ -158,3 +169,4 @@ class DataCard(object):
         self.regions = odict()
         self.systematics = odict()
         self.rate_params = []
+        self.params = []
