@@ -8,13 +8,6 @@ from rootStyles import setup_root
 from rootHistTools import draw_header, create_legend
 setup_root()
 
-import ROOT
-ROOT.gStyle.SetNumberContours(256)
-#one_sigma = ROOT.TMath.Erf(1/np.sqrt(2))
-#two_sigma = ROOT.TMath.Erf(2/np.sqrt(2))
-chi2_2df_one_sigma = ROOT.TMath.ChisquareQuantile(0.68, 2)
-chi2_2df_two_sigma = ROOT.TMath.ChisquareQuantile(0.95, 2)
-
 from color_palettes import ColourPalette
 
 def parse_args():
@@ -47,6 +40,7 @@ def profile_tree(tree, expression, bins, selection=""):
 
 name_conv = {
     "r_mumu": "r_{#mu#mu}",
+    "r_ee": "r_{ee}",
     "r_nunu": "r_{inv.}",
     "2*deltaNLL": "q({}, {})",
 }
@@ -64,7 +58,8 @@ if __name__ == "__main__":
     z_range = eval(options.z_range)
     bins = [npoints]+list(x_range)+[npoints]+list(y_range)
 
-    with root_open(options.infile, 'read') as rootfile:
+    files = options.infile.split(":")
+    with root_open(files[0], 'read') as rootfile:
         scan = rootfile.get("limit")
 
         # 2D profile of NLL scan averages per bin (smooths somewhat)
@@ -93,95 +88,112 @@ if __name__ == "__main__":
             markercolor = 'black',
             markersize  = 2,
             legendstyle = 'p',
-            title = "Best fit",
+            title = "Expected",
         )
         best_fit = [(getattr(p, xpoi), getattr(p, ypoi))
             for p in scan.copy_tree(
                 '{}==0 & 0.8<{}<1.2 & 0.9<{}<1.3'.format(zparam, xpoi, ypoi),
             )
-        ]
-        point_bf.SetPoint(1, *best_fit[0])
+        ][0]
+        point_bf.SetPoint(1, *best_fit)
 
-        # Make contours: 68 and 95%
-        cont_1sig = prof.Clone()
-        cont_1sig.linewidth = 2
-        cont_1sig.linecolor = "black"
-        cont_1sig.legendstyle = 'l'
-        cont_1sig.title = "68% CL"
+    def func(p):
+        phi = np.arctan(abs((p[1]-best_fit[1]) / (p[0]-best_fit[0])))
+        if p[0] >= best_fit[0] and p[1] >= best_fit[1]:
+            return phi
+        elif p[0] < best_fit[0] and p[1] >= best_fit[1]:
+            return np.pi - phi
+        elif p[0] < best_fit[0] and p[1] < best_fit[1]:
+            return np.pi + phi
+        else:
+            return 2*np.pi - phi
 
-        cont_2sig = cont_1sig.Clone()
-        cont_2sig.linestyle = 2
-        cont_2sig.legendstyle = 'l'
-        cont_2sig.title = "95% CL"
+    # 68% contour
+    with root_open(files[1], 'read') as rootfile:
+        contour = rootfile.get("limit")
 
-        cont_1sig.SetContour(1, np.array([chi2_2df_one_sigma]))
-        cont_2sig.SetContour(1, np.array([chi2_2df_two_sigma]))
-
-        cont_2sig_leg = Hist(
-            10, 0, 10,
-            linestyle = 2,
+        points = [(getattr(p, xpoi), getattr(p, ypoi)) for p in contour][1:]
+        points = sorted(points, key=lambda p: func(p))
+        points.append(points[0]) # cyclic
+        cont_1sig = Graph(len(points),
             linewidth = 2,
+            linestyle = 1,
+            linecolor = "black",
+            legendstyle = 'l',
+            title = "68% CL",
+        )
+        for i, p in enumerate(points):
+            cont_1sig.SetPoint(i, *p)
+
+    # 95% contour
+    with root_open(files[2], 'read') as rootfile:
+        contour = rootfile.get("limit")
+
+        points = [(getattr(p, xpoi), getattr(p, ypoi)) for p in contour][1:]
+        points = sorted(points, key=lambda p: func(p))
+        points.append(points[0]) # cyclic
+        cont_2sig = Graph(len(points),
+            linewidth = 2,
+            linestyle = 2,
             linecolor = "black",
             legendstyle = 'l',
             title = "95% CL",
         )
+        for i, p in enumerate(points):
+            cont_2sig.SetPoint(i, *p)
 
-        # need rebin 2 sigma to be able to set linestyle=2
-        nmerge = npoints / 25
-        cont_2sig = cont_2sig.rebinned((nmerge, nmerge))
+    # Create SM point
+    point_sm = Graph(1,
+        drawstyle   = 'p',
+        markerstyle = 33,
+        markercolor = '#e31a1c',
+        markersize  = 2,
+        legendstyle = 'p',
+        title = "SM",
+    )
+    point_sm.SetPoint(1, 1, 1)
 
-        # Create SM point
-        point_sm = Graph(1,
-            drawstyle   = 'p',
-            markerstyle = 33,
-            markercolor = '#e31a1c',
-            markersize  = 2,
-            legendstyle = 'p',
-            title = "SM",
-        )
-        point_sm.SetPoint(1, 1, 1)
+    point_sm_bkg = point_sm.Clone()
+    point_sm_bkg.markercolor = 'white'
+    point_sm_bkg.markersize = 2.3
 
-        point_sm_bkg = point_sm.Clone()
-        point_sm_bkg.markercolor = 'white'
-        point_sm_bkg.markersize = 2.3
+    # Custom palette
+    palette = ColourPalette()
+    palette.set_palette("mystic_ocean")
 
-        # Custom palette
-        palette = ColourPalette()
-        palette.set_palette("mystic_ocean")
+    # Create canvas
+    canvas = Canvas(width=750, height=650)
+    canvas.margin = 0.12, 0.15, 0.12, 0.08
 
-        # Create canvas
-        canvas = Canvas(width=750, height=650)
-        canvas.margin = 0.12, 0.15, 0.12, 0.08
+    # Custom legend
+    # legend position
+    #         False      True
+    #       ----------------------
+    # True  | top left | top right
+    #       |---------------------
+    # False | bot left | bot right
+    pos = {
+        (True, True): "top right",
+        (False, True): "top left",
+        (True, False): "bot right",
+        (False, False): "bot left",
+    }[(best_fit[0]-sum(x_range)/2 <= 0.,
+       best_fit[1]-sum(y_range)/2 < 0.)]
 
-        # Custom legend
-        # legend position
-        #         False      True
-        #       ----------------------
-        # True  | top left | top right
-        #       |---------------------
-        # False | bot left | bot right
-        pos = {
-            (True, True): "top right",
-            (False, True): "top left",
-            (True, False): "bot right",
-            (False, False): "bot left",
-        }[(best_fit[0][0]-sum(x_range)/2 < 0.,
-           best_fit[0][1]-sum(y_range)/2 < 0.)]
+    legend = create_legend(
+        [point_bf, cont_1sig, cont_2sig],
+        pos = pos,
+    )
+    legend.SetFillColor(0)
+    legend.SetFillStyle(1001)
 
-        legend = create_legend(
-            [point_bf, point_sm, cont_1sig, cont_2sig_leg],
-            pos = pos,
-        )
-        legend.SetFillColor(0)
-        legend.SetFillStyle(1001)
-
-        # draw it
-        prof.Draw("colz")
-        cont_1sig.Draw("cont3same")
-        cont_2sig.Draw("cont3same")
-        point_sm_bkg.Draw("same")
-        point_sm.Draw("same")
-        point_bf.Draw("same")
-        legend.Draw()
-        draw_header()
-        canvas.save_as(options.outfile)
+    # draw it
+    prof.Draw("colz")
+    cont_1sig.Draw("same")
+    cont_2sig.Draw("same")
+    point_sm_bkg.Draw("same")
+    #point_sm.Draw("same")
+    point_bf.Draw("same")
+    legend.Draw()
+    draw_header()
+    canvas.save_as(options.outfile)

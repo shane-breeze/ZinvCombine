@@ -47,7 +47,7 @@ class DataCard(object):
         if set(sorted(self.systematics.keys())) != set(sorted(sorted_list)):
             missing = list(set(sorted(self.systematics.keys())) - set(sorted(sorted_list)))
             print "Trying to sort systematics, but missing: {}\nWill skip sorting".format(missing)
-            return
+            #return
         self.systematics = odict([(k, self.systematics[k]) for k in sorted_list])
 
     def textblock_break(self):
