@@ -3,6 +3,7 @@ import ROOT
 
 class ColourPalette(object):
     def __init__(self):
+        ROOT.gStyle.SetNumberContours(255)
         self.mystic_ocean()
 
     def set_palette(self, name, alpha=1., ncolours=255):
