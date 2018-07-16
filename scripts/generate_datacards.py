@@ -131,103 +131,106 @@ def create_datacards(input_yaml, xlow, outfile):
     dc.add_rateparam("tf_wlnu", "monojet", "wlnu", 1)
 
     # Single Muon
-    dc.add_region("singlemu", inputs.regions["singlemu"].processes["data"].content)
+    dc.add_region("singlemumet", inputs.regions["singlemumet"].processes["data"].content)
     for idx, proc in odict([(1, "wlnu"), (2, "qcd"), (3, "bkg")]).items():
-        nominal = inputs.regions["singlemu"].processes[proc].content
-        stats = inputs.regions["singlemu"].processes[proc].stats
+        nominal = inputs.regions["singlemumet"].processes[proc].content
+        stats = inputs.regions["singlemumet"].processes[proc].stats
         neff = int((stats / nominal)**2)+1 if nominal>0. else 0
         alpha = nominal / neff if neff>0 else 0.
-        dc.add_process("singlemu", proc, idx, nominal)
+        dc.add_process("singlemumet", proc, idx, nominal)
 
         # lumi
         if proc in ["bkg"]:
-            dc.add_systematic("singlemu", proc, "CMS_lumi", "lnN", 1.025)
+            dc.add_systematic("singlemumet", proc, "CMS_lumi", "lnN", 1.025)
         if proc in ["qcd"]:
-            dc.add_systematic("singlemu", proc, "CMS_qcd", "lnN", 1.20)
+            dc.add_systematic("singlemumet", proc, "CMS_qcd", "lnN", 1.20)
             if nominal == 0.:
                 continue
         # PU
-        pu_up = inputs.regions["singlemu"].processes[proc].systs["pu"].up / nominal
-        pu_down = inputs.regions["singlemu"].processes[proc].systs["pu"].down / nominal
-        dc.add_systematic("singlemu", proc, "CMS_puReweight", "lnN", 1+(abs(pu_up-1)+abs(1-pu_down))/2)
+        pu_up = inputs.regions["singlemumet"].processes[proc].systs["pu"].up / nominal
+        pu_down = inputs.regions["singlemumet"].processes[proc].systs["pu"].down / nominal
+        dc.add_systematic("singlemumet", proc, "CMS_puReweight", "lnN", 1+(abs(pu_up-1)+abs(1-pu_down))/2)
 
         # Muon SF
-        muon_up = inputs.regions["singlemu"].processes[proc].systs["muonIsoSF"].up / nominal
-        muon_down = inputs.regions["singlemu"].processes[proc].systs["muonIsoSF"].down / nominal
-        dc.add_systematic("singlemu", proc, "CMS_muonIsoSF", "lnN", 1+(abs(muon_up-1)+abs(1-muon_down))/2)
+        muon_up = inputs.regions["singlemumet"].processes[proc].systs["muonIsoSF"].up / nominal
+        muon_down = inputs.regions["singlemumet"].processes[proc].systs["muonIsoSF"].down / nominal
+        dc.add_systematic("singlemumet", proc, "CMS_muonIsoSF", "lnN", 1+(abs(muon_up-1)+abs(1-muon_down))/2)
 
-        muon_up = inputs.regions["singlemu"].processes[proc].systs["muonIdSF"].up / nominal
-        muon_down = inputs.regions["singlemu"].processes[proc].systs["muonIdSF"].down / nominal
-        dc.add_systematic("singlemu", proc, "CMS_muonIdSF", "lnN", 1+(abs(muon_up-1)+abs(1-muon_down))/2)
+        muon_up = inputs.regions["singlemumet"].processes[proc].systs["muonIdSF"].up / nominal
+        muon_down = inputs.regions["singlemumet"].processes[proc].systs["muonIdSF"].down / nominal
+        dc.add_systematic("singlemumet", proc, "CMS_muonIdSF", "lnN", 1+(abs(muon_up-1)+abs(1-muon_down))/2)
 
-        muon_up = inputs.regions["singlemu"].processes[proc].systs["muonTrackSF"].up / nominal
-        muon_down = inputs.regions["singlemu"].processes[proc].systs["muonTrackSF"].down / nominal
-        dc.add_systematic("singlemu", proc, "CMS_muonTrackSF", "lnN", 1+(abs(muon_up-1)+abs(1-muon_down))/2)
+        muon_up = inputs.regions["singlemumet"].processes[proc].systs["muonTrackSF"].up / nominal
+        muon_down = inputs.regions["singlemumet"].processes[proc].systs["muonTrackSF"].down / nominal
+        dc.add_systematic("singlemumet", proc, "CMS_muonTrackSF", "lnN", 1+(abs(muon_up-1)+abs(1-muon_down))/2)
 
         # MET trigger
-        met_up = inputs.regions["singlemu"].processes[proc].systs["metTrigMuSF"].up / nominal
-        met_down = inputs.regions["singlemu"].processes[proc].systs["metTrigMuSF"].down / nominal
-        dc.add_systematic("singlemu", proc, "CMS_metTrigMuSF", "lnN", 1+(abs(met_up-1)+abs(1-met_down))/2)
+        met_up = inputs.regions["singlemumet"].processes[proc].systs["metTrigMuSF"].up / nominal
+        met_down = inputs.regions["singlemumet"].processes[proc].systs["metTrigMuSF"].down / nominal
+        dc.add_systematic("singlemumet", proc, "CMS_metTrigMuSF", "lnN", 1+(abs(met_up-1)+abs(1-met_down))/2)
 
         # JECs
-        jec_up = inputs.regions["singlemu"].processes[proc].systs["jec"].up / nominal
-        jec_down = inputs.regions["singlemu"].processes[proc].systs["jec"].down / nominal
-        dc.add_systematic("singlemu", proc, "CMS_jec", "lnN", 1+(abs(jec_up-1)+abs(1-jec_down))/2)
-    dc.add_rateparam("tf_wlnu", "singlemu", "wlnu", 1)
+        jec_up = inputs.regions["singlemumet"].processes[proc].systs["jec"].up / nominal
+        jec_down = inputs.regions["singlemumet"].processes[proc].systs["jec"].down / nominal
+        dc.add_systematic("singlemumet", proc, "CMS_jec", "lnN", 1+(abs(jec_up-1)+abs(1-jec_down))/2)
+    dc.add_rateparam("tf_wlnu", "singlemumet", "wlnu", 1)
 
     # Double Muon
-    dc.add_region("doublemu", inputs.regions["doublemu"].processes["data"].content)
+    dc.add_region("doublemumet", inputs.regions["doublemumet"].processes["data"].content)
     for idx, proc in odict([(0, "dymumu"), (1, "qcd"), (2, "bkg")]).items():
-        nominal = inputs.regions["doublemu"].processes[proc].content
-        stats = inputs.regions["doublemu"].processes[proc].stats
+        nominal = inputs.regions["doublemumet"].processes[proc].content
+        stats = inputs.regions["doublemumet"].processes[proc].stats
         neff = int((stats / nominal)**2)+1 if nominal>0. else 0.
         alpha = nominal / neff if neff>0 else 0.
-        dc.add_process("doublemu", proc, idx, nominal)
+        dc.add_process("doublemumet", proc, idx, nominal)
 
         # lumi
         if proc in ["dymumu", "bkg"]:
-            dc.add_systematic("doublemu", proc, "CMS_lumi", "lnN", 1.025)
+            dc.add_systematic("doublemumet", proc, "CMS_lumi", "lnN", 1.025)
         if proc in ["qcd"]:
-            dc.add_systematic("doublemu", proc, "CMS_qcd", "lnN", 1.20)
-            #dc.add_systematic("doublemu", proc, "CMS_mcstat_qcd", "gmN {}".format(neff), alpha)
+            dc.add_systematic("doublemumet", proc, "CMS_qcd", "lnN", 1.20)
+            #dc.add_systematic("doublemumet", proc, "CMS_mcstat_qcd", "gmN {}".format(neff), alpha)
             if nominal == 0.:
                 continue
 
         # PU
-        pu_up = inputs.regions["doublemu"].processes[proc].systs["pu"].up / nominal
-        pu_down = inputs.regions["doublemu"].processes[proc].systs["pu"].down / nominal
-        dc.add_systematic("doublemu", proc, "CMS_puReweight", "lnN", 1+(abs(pu_up-1)+abs(1-pu_down))/2)
+        pu_up = inputs.regions["doublemumet"].processes[proc].systs["pu"].up / nominal
+        pu_down = inputs.regions["doublemumet"].processes[proc].systs["pu"].down / nominal
+        dc.add_systematic("doublemumet", proc, "CMS_puReweight", "lnN", 1+(abs(pu_up-1)+abs(1-pu_down))/2)
 
         # Muon SF
-        muon_up = inputs.regions["doublemu"].processes[proc].systs["muonIsoSF"].up / nominal
-        muon_down = inputs.regions["doublemu"].processes[proc].systs["muonIsoSF"].down / nominal
-        dc.add_systematic("doublemu", proc, "CMS_muonIsoSF", "lnN", 1+(abs(muon_up-1)+abs(1-muon_down))/2)
+        muon_up = inputs.regions["doublemumet"].processes[proc].systs["muonIsoSF"].up / nominal
+        muon_down = inputs.regions["doublemumet"].processes[proc].systs["muonIsoSF"].down / nominal
+        dc.add_systematic("doublemumet", proc, "CMS_muonIsoSF", "lnN", 1+(abs(muon_up-1)+abs(1-muon_down))/2)
 
-        muon_up = inputs.regions["doublemu"].processes[proc].systs["muonIdSF"].up / nominal
-        muon_down = inputs.regions["doublemu"].processes[proc].systs["muonIdSF"].down / nominal
-        dc.add_systematic("doublemu", proc, "CMS_muonIdSF", "lnN", 1+(abs(muon_up-1)+abs(1-muon_down))/2)
+        muon_up = inputs.regions["doublemumet"].processes[proc].systs["muonIdSF"].up / nominal
+        muon_down = inputs.regions["doublemumet"].processes[proc].systs["muonIdSF"].down / nominal
+        dc.add_systematic("doublemumet", proc, "CMS_muonIdSF", "lnN", 1+(abs(muon_up-1)+abs(1-muon_down))/2)
 
-        muon_up = inputs.regions["doublemu"].processes[proc].systs["muonTrackSF"].up / nominal
-        muon_down = inputs.regions["doublemu"].processes[proc].systs["muonTrackSF"].down / nominal
-        dc.add_systematic("doublemu", proc, "CMS_muonTrackSF", "lnN", 1+(abs(muon_up-1)+abs(1-muon_down))/2)
+        muon_up = inputs.regions["doublemumet"].processes[proc].systs["muonTrackSF"].up / nominal
+        muon_down = inputs.regions["doublemumet"].processes[proc].systs["muonTrackSF"].down / nominal
+        dc.add_systematic("doublemumet", proc, "CMS_muonTrackSF", "lnN", 1+(abs(muon_up-1)+abs(1-muon_down))/2)
 
         # MET trigger
-        met_up = inputs.regions["doublemu"].processes[proc].systs["metTrigMuSF"].up / nominal
-        met_down = inputs.regions["doublemu"].processes[proc].systs["metTrigMuSF"].down / nominal
-        dc.add_systematic("doublemu", proc, "CMS_metTrigMuSF", "lnN", 1+(abs(met_up-1)+abs(1-met_down))/2)
+        met_up = inputs.regions["doublemumet"].processes[proc].systs["metTrigMuSF"].up / nominal
+        met_down = inputs.regions["doublemumet"].processes[proc].systs["metTrigMuSF"].down / nominal
+        dc.add_systematic("doublemumet", proc, "CMS_metTrigMuSF", "lnN", 1+(abs(met_up-1)+abs(1-met_down))/2)
 
         # JECs
-        jec_up = inputs.regions["doublemu"].processes[proc].systs["jec"].up / nominal
-        jec_down = inputs.regions["doublemu"].processes[proc].systs["jec"].down / nominal
-        dc.add_systematic("doublemu", proc, "CMS_jec", "lnN", 1+(abs(jec_up-1)+abs(1-jec_down))/2)
+        jec_up = inputs.regions["doublemumet"].processes[proc].systs["jec"].up / nominal
+        jec_down = inputs.regions["doublemumet"].processes[proc].systs["jec"].down / nominal
+        dc.add_systematic("doublemumet", proc, "CMS_jec", "lnN", 1+(abs(jec_up-1)+abs(1-jec_down))/2)
 
     # rate params
-    dc.add_rateparam("r_mumu", "doublemu", "dymumu", 1)
+    dc.add_rateparam("r_mumu", "doublemumet", "dymumu", 1)
     dc.add_rateparam("r_nunu", "monojet", "znunu", "(@0*@1) r,r_mumu")
 
     dc.sort_systematics([
         "CMS_lumi", "CMS_puReweight", "CMS_jec", "CMS_metTrigSF",
-        "CMS_metTrigMuSF", "CMS_muonIdSF", "CMS_muonIsoSF", "CMS_muonTrackSF",
+        "CMS_metTrigMuSF",
+        "CMS_muonIdSF", "CMS_muonIsoSF",
+        "CMS_muonTrackSF", #"CMS_muonTrigSF",
+        #"CMS_muonAltStat", "CMS_muonAltSigFsr", "CMS_muonAltSigRes", "CMS_muonAltBkgModel", "CMS_muonAltTagBias", "CMS_muonAltGenChoice",
         "CMS_qcd",
     ])
     dc.write()
