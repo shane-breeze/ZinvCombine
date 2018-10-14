@@ -1,13 +1,10 @@
 #!/bin/bash
+add_opts="-t -1"
 
-## Systematic impacts
-combineTool.py -M Impacts -d ${1} -m 91 --doInitialFit -t -1 --expectSignal 1
-combineTool.py -M Impacts -d ${1} -m 91 --doFits -t -1 --expectSignal 1
-combineTool.py -M Impacts -d ${1} -m 91 -o impacts.json -t -1 --expectSignal 1
-plotImpacts.py -i impacts.json -o impacts
+combine -n "NominalFit" -M MultiDimFit --algo singles --redefineSignalPOIs r --expectSignal 1 --robustFit 1 -d ${1} ${add_opts}
 
-## Stats impacts
-combine ${1} -n StatsImpacts -m 91 -M FitDiagnostics --forceRecreateNLL --freezeParameters all -t -1 --expectSignal 1
-fitdiag_to_fitparams.py fitDiagnosticsStatsImpacts.root -o impacts_stats.json
+for nuis in jer jes lumi metTrigSF muonId muonIso muonTrack pileup unclust; do
+    combine -n "NuisFit_${nuis}" -M MultiDimFit --algo impact --redefineSignalPOIs r -P ${nuis} --floatOtherPOIs 1 --saveInactivePOI 1 --expectSignal 1 --robustFit 1 -d ${1} ${add_opts}
+done
 
-merge_impact_jsons.py impacts.json impacts_stats.json -o impacts.json
+combine -n "NuisFit_statg" -M FitDiagnostics --expectSignal 1 --robustFit 1 --freezeParameters all ${1} ${add_opts}
