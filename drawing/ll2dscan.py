@@ -12,6 +12,9 @@ def parse_args():
                         help="Input ROOT file with the 68% contour")
     parser.add_argument("--twosigma", type=str, default=None,
                         help="Input ROOT file with the 68% contour")
+    parser.add_argument("-n", "--nbins", type=int, default=100,
+                        help="Number of points scanned across in each "\
+                             "dimension")
     parser.add_argument("-o", "--output", type=str, default="ll2dscan.pdf",
                         help="Output file")
 
@@ -54,10 +57,11 @@ def main():
     _, _, _, im = ax.hist2d(
         rmumu,
         rnunu,
-        bins = (60, 60),
+        bins = (options.nbins, options.nbins),
         weights = nll,
         cmap = 'Blues',
     )
+    im.set_clim((0., None))
 
     ax.set_xlabel(r'$r_{\mu\mu}$', fontsize='large')
     ax.set_ylabel(r'$r_{\mathrm{inv.}}$', fontsize='large')

@@ -40,6 +40,7 @@ def main():
     ax.plot(poi_exp, nll_exp, marker='o', markersize=1.5, color='black', label="Exp", lw=1.2)
 
     # observed
+    obs_min, obs_max = None, None
     if options.scan_obs:
         rfile_obs = uproot.open(options.scan_obs)
         scan_obs = rfile_obs["limit"]
@@ -48,7 +49,13 @@ def main():
         nll_obs = 2*arrays_obs["deltaNLL"][1:]
         ax.plot(poi_obs, nll_obs, marker='o', markersize=1.5, color='red', label="Obs", lw=1.2)
 
-    ax.set_xlim((min(poi_exp.min(), poi_obs.min()), max(poi_exp.max(), poi_exp.max())))
+        obs_min = poi_obs.min()
+        obs_max = poi_obs.max()
+
+    xmin = poi_exp.min() if obs_min is None else min(poi_exp.min(), obs_min)
+    xmax = poi_exp.max() if obs_max is None else max(poi_exp.max(), obs_max)
+
+    ax.set_xlim((xmin, xmax))
     ax.set_ylim((0., 8.))
 
     handles, labels = ax.get_legend_handles_labels()

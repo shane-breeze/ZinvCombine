@@ -1,10 +1,9 @@
 #!/bin/bash
-add_opts="-t -1"
-
-combine -n "NominalFit" -M MultiDimFit --algo singles --redefineSignalPOIs r --expectSignal 1 --robustFit 1 -d ${1} ${add_opts}
+safety="--robustFit 1 --rMin 0 --rMax 5"
+combine -n "NominalFit${3}" -M MultiDimFit --algo singles --redefineSignalPOIs r --expectSignal 1 ${safety} -d ${1} ${2}
 
 for nuis in jer jes lumi metTrigSF muonId muonIso muonTrack pileup unclust; do
-    combine -n "NuisFit_${nuis}" -M MultiDimFit --algo impact --redefineSignalPOIs r -P ${nuis} --floatOtherPOIs 1 --saveInactivePOI 1 --expectSignal 1 --robustFit 1 -d ${1} ${add_opts}
+    combine -n "NuisFit${3}_${nuis}" -M MultiDimFit --algo impact --redefineSignalPOIs r -P ${nuis} --floatOtherPOIs 1 --saveInactivePOI 1 --expectSignal 1 ${safety} -d ${1} ${2}
 done
 
-combine -n "NuisFit_statg" -M FitDiagnostics --expectSignal 1 --robustFit 1 --freezeParameters all ${1} ${add_opts}
+combine -n "NuisFit${3}_stat" -M MultiDimFit --algo singles --freezeParameters all --expectSignal 1 ${safety} ${1} ${2}

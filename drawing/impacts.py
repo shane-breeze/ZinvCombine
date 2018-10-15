@@ -9,14 +9,13 @@ import os
 import re
 import uproot
 
-regex_initial_fit = re.compile("higgsCombine_initialFit_Test\.MultiDimFit\.mH91\.root")
-regex_param_fit = re.compile("higgsCombine_paramFit_Test_(?P<param>[^_^.]*)\.MultiDimFit\.mH91\.root")
-
 def parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("results_dir", type=str,
                         help="Directory with the desired results")
+    parser.add_argument("-n", "--name", type=str, default="Exp",
+                        help="String to add to regex")
     parser.add_argument("-o", "--output", type=str, default="impacts.pdf",
                         help="Output file")
 
@@ -24,9 +23,11 @@ def parse_args():
 
 def get_fit_result(path, param):
     limit = uproot.open(path)["limit"]
+    if limit.numentries == 0:
+        return np.array([1., 1., 1.])
     return limit.array(param)
 
-def get_fit_results(results_dir):
+def get_fit_results(results_dir, regex_initial_fit, regex_param_fit):
     names = []
     nuisances = []
     impacts = []
@@ -169,7 +170,14 @@ def draw_impacts(names, nuisances, impacts, bestfit, output):
 def main():
     options = parse_args()
 
-    names, nuisances, impacts, bestfit = get_fit_results(options.results_dir)
+    regex_initial_fit = re.compile("higgsCombineNominalFit{}\.MultiDimFit\.mH120\.root".format(options.name))
+    regex_param_fit = re.compile("higgsCombineNuisFit{}_(?P<param>[^_^.]*)\.MultiDimFit\.mH120\.root".format(options.name))
+
+    names, nuisances, impacts, bestfit = get_fit_results(
+        options.results_dir,
+        regex_initial_fit,
+        regex_param_fit,
+    )
     draw_impacts(names, nuisances, impacts, bestfit, options.output)
 
 if __name__ == "__main__":
