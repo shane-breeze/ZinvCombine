@@ -14,5 +14,5 @@ cd $CMSSW_BASE/src
 eval `scramv1 runtime -sh`
 cd $cwd
 
-PATH=${PATH}:${cwd}/scripts
-PYTHONPATH=${PYTHONPATH}:${cwd}:${PYTHON_EXTRA}/pip/lib/python2.7/site-packages:/vols/build/cms/sdb15/ZinvWidth/AlphaTools/Utils
+export PATH=${PATH}:${cwd}/scripts
+export PYTHONPATH=${PYTHONPATH}:${cwd}

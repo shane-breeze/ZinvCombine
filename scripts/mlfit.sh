@@ -1,2 +1,3 @@
 #!/bin/bash
-combine ${1} -n Zinv -m 91 -M FitDiagnostics --forceRecreateNLL --saveNLL --plots --saveNormalizations --saveWithUncertainties --expectSignal 1
+safety="--robustFit 1 --rMin 0 --rMax 5"
+combine -n MLFit${3} ${1} -M FitDiagnostics --saveNLL --plots --saveNormalizations --saveWithUncertainties ${safety} --expectSignal 1 ${2}

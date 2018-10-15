@@ -1,13 +1,9 @@
 #!/bin/bash
+safety="--robustFit 1 --rMin 0 --rMax 5"
+combine -n "NominalFit${3}" -M MultiDimFit --algo singles --redefineSignalPOIs r --expectSignal 1 ${safety} -d ${1} ${2}
 
-## Systematic impacts
-combineTool.py -M Impacts -d ${1} -m 91 --doInitialFit
-combineTool.py -M Impacts -d ${1} -m 91 --doFits
-combineTool.py -M Impacts -d ${1} -m 91 -o impacts.json
-plotImpacts.py -i impacts.json -o impacts
+for nuis in jer jes lumi metTrigSF muonId muonIso muonTrack pileup unclust; do
+    combine -n "NuisFit${3}_${nuis}" -M MultiDimFit --algo impact --redefineSignalPOIs r -P ${nuis} --floatOtherPOIs 1 --saveInactivePOI 1 --expectSignal 1 ${safety} -d ${1} ${2}
+done
 
-## Stats impacts
-combine ${1} -n StatsImpacts -m 91 -M FitDiagnostics --forceRecreateNLL --freezeParameters all
-fitdiag_to_fitparams.py fitDiagnosticsStatsImpacts.root -o impacts_stats.json
-
-merge_impact_jsons.py impacts.json impacts_stats.json -o impacts.json
+combine -n "NuisFit${3}_stat" -M MultiDimFit --algo singles --freezeParameters all --expectSignal 1 ${safety} ${1} ${2}
