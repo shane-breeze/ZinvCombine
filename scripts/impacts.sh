@@ -1,8 +1,9 @@
 #!/bin/bash
-safety="--robustFit 1 --rMin 0 --rMax 5"
+safety="--robustFit 1 --rMin 0 --rMax 2"
 combine -n "NominalFit${3}" -M MultiDimFit --algo singles --redefineSignalPOIs r --expectSignal 1 ${safety} -d ${1} ${2}
 
-for nuis in jer jes lumi metTrigSF muonId muonIso muonTrack pileup unclust; do
+nuisances=$(cat ${1/root/txt} | awk '{print $1}' | sed -e '1,/rate/d' | tail -n +2 | sed -e '/-----/,$d')
+for nuis in ${nuisances[@]}; do
     combine -n "NuisFit${3}_${nuis}" -M MultiDimFit --algo impact --redefineSignalPOIs r -P ${nuis} --floatOtherPOIs 1 --saveInactivePOI 1 --expectSignal 1 ${safety} -d ${1} ${2}
 done
 
