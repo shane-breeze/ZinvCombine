@@ -12,6 +12,8 @@ import uproot
 
 conv_names = {
     "metTrigSF": r'$E_{\rm{T}}^{\rm{miss}}$ trig.',
+    "metTrigSyst": r'$E_{\rm{T}}^{\rm{miss}}$ trig. syst.',
+    "metTrigStat": r'$E_{\rm{T}}^{\rm{miss}}$ trig. stat.',
     "stat": r'Stat.',
     "jesTotal":     r'JES',
     "jer":     r'JER',

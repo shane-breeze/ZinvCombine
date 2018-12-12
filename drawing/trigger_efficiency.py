@@ -8,6 +8,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from scipy.special import erf
+from scipy.optimize import curve_fit
 
 try:
     import cPickle as pickle
@@ -49,8 +50,11 @@ def get_trigger_efficiencies(inputdir, regex_string, pois):
         if xrange[-1] == "Inf":
             xrange[-1] = np.inf
         xrange = map(float, match.groups())
+        print(path)
         f = uproot.open(path)
         t = f["limit"]
+        if t.numentries == 0:
+            continue
         results_pois = t.arrays(pois, outputtype=tuple)
 
         if results_pois[0].shape[0] == 0:
@@ -67,15 +71,20 @@ def get_trigger_efficiencies(inputdir, regex_string, pois):
             result[poi+"_up"] = results_poi.max() # up
             result[poi+"_down"] = results_poi.min() # down
         results.append(result)
+    if len(results)==0:
+        return None
     df = pd.DataFrame(results).sort_values("xlow", ascending=True)\
             .reset_index(drop=True)\
-            .set_index(["xlow", "xupp"])
+            .set_index(["xlow", "xupp"])\
+            .dropna()
     return df
 
 def draw_efficiencies(df, pois, output, label_map, fit_params):
+    df = df.iloc[:-1]
+    print(df)
     for poi in pois:
-        df[poi+"_up"] = df[poi+"_up"] - df[poi]
-        df[poi+"_down"] = df[poi] - df[poi+"_down"]
+        df.loc[:,poi+"_up"] = df.eval("{0}_up - {0}".format(poi))
+        df.loc[:,poi+"_down"] = df.eval("{0} - {0}_down".format(poi))
 
         bin_low = df.index.get_level_values("xlow").values
         bin_upp = df.index.get_level_values("xupp").values
@@ -88,23 +97,16 @@ def draw_efficiencies(df, pois, output, label_map, fit_params):
         ax.set_xlabel(r'$p_{\mathrm{T}}^{\mathrm{miss}}$ (GeV)', fontsize=12)
         ax.set_ylabel(label_map.get(poi, poi), fontsize=12)
 
-        with open(output+"_"+poi+".pkl", 'w') as f:
-            pickle.dump((bin_cent, df[poi].values, df[[poi+"_up", poi+"_down"]].values.T), f)
-
-        from scipy.optimize import curve_fit
-        from scipy.special import erf
-        def func(z, a, b, c):
-            return 0.5*a*(1+erf((z-b)/(np.sqrt(2)*c)))
-        popt, pcov = curve_fit(func, bin_cent[10:], df[poi].values[10:], p0=(1, -1000, 5000))
+        popt, pcov = curve_fit(erf_func, bin_cent[bin_cent>=150], df[poi].values[bin_cent>=150], p0=(1, 100, 50))
         popt = list(popt)
+        print(popt)
         if popt[0]>1:
             popt[0] = 1
-        print(popt)
 
         ax.errorbar(
             bin_cent,
             df[poi].values,
-            yerr = df[[poi+"_up", poi+"_down"]].values.T,
+            yerr = df[[poi+"_down", poi+"_up"]].values.T,
             fmt = 'o',
             markersize = 2,
             linewidth = 0.6,
@@ -113,10 +115,11 @@ def draw_efficiencies(df, pois, output, label_map, fit_params):
             zorder = 10,
         )
 
-        z = np.linspace(bin_low.min(), 500, 1000)
+        #z = np.linspace(bin_low.min(), bin_upp.max(), 1000)
+        z = np.linspace(100, bin_upp.max(), 1000)
         ax.plot(
             z,
-            func(z, *popt),
+            erf_func(z, *popt),
             color='red',
             zorder = 20,
         )
@@ -133,8 +136,9 @@ def draw_efficiencies(df, pois, output, label_map, fit_params):
 
         ax.axhline(1, ls='--', color='gray', zorder=5)
 
-        ax.set_xlim((bin_low.min(), 500))#bin_upp.max()))
-        ax.set_ylim((0, 1.1))
+        #ax.set_xlim(bin_low.min(), bin_upp.max())
+        ax.set_xlim(0, 1000)
+        ax.set_ylim(0, 1.1)
 
         ax.text(0.01, 1, r'$\mathbf{CMS}\ \mathit{Preliminary}$',
                 ha='left', va='bottom', transform=ax.transAxes, fontsize=12)
@@ -151,6 +155,9 @@ def main():
 
     # Get trigger efficiencies
     df = get_trigger_efficiencies(options.inputdir, options.regex, pois)
+    print(df)
+    with open("trigger_df_fit.pkl", 'w') as f:
+        pickle.dump(df, f)
     draw_efficiencies(df, pois, options.output, eval(options.labels), options.fitparams)
 
 if __name__ == "__main__":

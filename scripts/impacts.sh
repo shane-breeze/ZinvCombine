@@ -1,5 +1,5 @@
 #!/bin/bash
-safety="--robustFit 1 --rMin 0 --rMax 2"
+safety="--robustFit 1 --rMin 0.5 --rMax 1.5"
 combine -n "NominalFit${3}" -M MultiDimFit --algo singles --redefineSignalPOIs r --expectSignal 1 ${safety} -d ${1} ${2}
 
 nuisances=$(cat ${1/root/txt} | awk '{print $1}' | sed -e '1,/rate/d' | tail -n +2 | sed -e '/-----/,$d')

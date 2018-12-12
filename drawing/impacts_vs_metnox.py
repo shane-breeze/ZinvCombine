@@ -54,27 +54,27 @@ def draw_impact_vs_metnox(df, poi, output):
     df_av = df.pivot_table(index="bin", columns="parameter", values=poi+"_av")
 
     leg_sort = df_av.max(axis=0).sort_values().index.values[-6:]
-    df = df[df.index.get_level_values("parameter").isin(leg_sort)]
+    #df = df[df.index.get_level_values("parameter").isin(leg_sort)]
 
     fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(5.4, 4.8))
 
-    binning = list(df.index.get_level_values("bin").unique().values)
-    binning.append(2*binning[-1]-binning[-2])
+    binning = sorted(list(df.index.get_level_values("bin").unique().values))
+    #binning.append(2*binning[-1]-binning[-2])
     binning = np.array(binning)
     params = df.index.get_level_values("parameter").unique().values
     for p in params:
         ax.step(
             binning,
-            list(df[df.index.get_level_values("parameter")==p][poi+"_up"])+[0.],
-            where = 'post',
-            color = nuis_col[p],
-            label = nuis_lab[p],
+            list(df[df.index.get_level_values("parameter")==p][poi+"_up"]),
+            where = 'pre',
+            color = nuis_col.get(p, "gray"),
+            label = nuis_lab.get(p, p),
         )
         ax.step(
             binning,
-            list(df[df.index.get_level_values("parameter")==p][poi+"_down"])+[0.],
-            where = 'post',
-            color = nuis_col[p],
+            list(df[df.index.get_level_values("parameter")==p][poi+"_down"]),
+            where = 'pre',
+            color = nuis_col.get(p, "gray"),
         )
         ax.axhline(0., lw=1.5, ls='--', color='black')
 
