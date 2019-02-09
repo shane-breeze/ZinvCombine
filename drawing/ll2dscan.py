@@ -39,18 +39,18 @@ def main():
     arrays = scan.arrays(["r_mumu", "r_nunu", "deltaNLL"])
 
     # best fit points
-    rmumu_bf = 1. #arrays["r_mumu"][0]
-    rnunu_bf = 1. #arrays["r_nunu"][0]
+    rmumu_bf = arrays["r_mumu"][0]
+    rnunu_bf = arrays["r_nunu"][0]
     rmumu_sm = 1.
     rnunu_sm = 1.
 
     # scan
-    rmumu = arrays["r_mumu"][1:]
-    rnunu = arrays["r_nunu"][1:]
-    nll = 2*arrays["deltaNLL"][1:]
-    #rmumu = rmumu[nll>0]
-    #rnunu = rnunu[nll>0]
-    #nll = nll[nll>0]
+    rmumu = arrays["r_mumu"]
+    rnunu = arrays["r_nunu"]
+    nll = 2*arrays["deltaNLL"]
+    rmumu = rmumu[nll>0]
+    rnunu = rnunu[nll>0]
+    nll = nll[nll>0]
     nll[nll>10.] = 10.
 
     x = np.unique(rmumu)
@@ -153,7 +153,7 @@ def main():
     args = ax.get_legend_handles_labels()
     kwargs = {"fontsize": 12, "framealpha": 0.8, "labelspacing": 0.25}
     ax.legend(*args, **kwargs)
-    ax.text(0.01, 1, r'$\mathbf{CMS}\ \mathit{Preliminary}$',
+    ax.text(0.01, 1, r'$\mathbf{CMS}$', #\ \mathit{Preliminary}$',
             ha='left', va='bottom', transform=ax.transAxes,
             fontsize=12)
     ax.text(0.99, 1, r'$35.9\ \mathrm{fb}^{-1}(13\ \mathrm{TeV})$',
@@ -162,7 +162,7 @@ def main():
 
     #plt.tight_layout()
     fig.savefig(options.output, format="pdf", bbox_inches="tight")
-    fig.savefig(options.output.replace("pdf", "png"), format="png", bbox_inches="tight")
+    #fig.savefig(options.output.replace("pdf", "png"), format="png", bbox_inches="tight")
     plt.close(fig)
     print("Created {}".format(options.output))
 

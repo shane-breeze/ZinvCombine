@@ -92,7 +92,7 @@ def main():
 
         df = pd.DataFrame(arrays_exp)
         dnll = df["deltaNLL"].values
-        df = df[[c for c in df.columns if "deltaNLL" not in c]]
+        #df = df.drop("deltaNLL", axis=1)
         bf = df.iloc[0]
         df = df.iloc[1:]
         df = df.sort_values(poi)
@@ -101,19 +101,19 @@ def main():
         df = df.drop(poi, axis=1)
         df = pd.melt(df)
         df.columns = ["n", "Value"]
-        df["deltaNLL"] = list(dnll)*len(df["n"].unique())
-        df[conv_names[poi]] = list(poi_series)*len(df["n"].unique())
+        df["deltaNLL"] = list(dnll[1:])*len(df["n"].unique())
+        df[conv_names.get(poi,poi)] = list(poi_series)*len(df["n"].unique())
 
         def convert(name):
             try:
-                return conv_names[name]
+                return conv_names.get(name, name)
             except KeyError:
                 return name.replace("_", " ")
         df["n"] = df["n"].apply(convert)
 
         g = sns.FacetGrid(df, col="n", margin_titles=True, col_wrap=5,
                           sharex=False, sharey=False)
-        g.map(plt.plot, conv_names[poi], "Value")
+        g.map(plt.plot, conv_names.get(poi,poi), "Value")
 
         g.fig.text(0, 1.005, r'$\mathbf{CMS}\ \mathit{Preliminary}$',
                    ha='left', va='bottom', fontsize='large')
