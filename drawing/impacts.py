@@ -11,13 +11,13 @@ import re
 import uproot
 
 conv_names = {
-    "metTrigSF": r'$E_{\rm{T}}^{\rm{miss}}$ trig.',
+    "metTrigSF":   r'$E_{\rm{T}}^{\rm{miss}}$ trig.',
     "metTrigSyst": r'$E_{\rm{T}}^{\rm{miss}}$ trig. syst.',
     "metTrigStat": r'$E_{\rm{T}}^{\rm{miss}}$ trig. stat.',
-    "stat": r'Stat.',
-    "jesTotal":     r'JES',
-    "jer":     r'JER',
-    "unclust": r'Unclustered Energy',
+    "stat":     r'Stat.',
+    "jesTotal": r'JES',
+    "jer":      r'JER',
+    "unclust":  r'Unclustered Energy',
     "jesSinglePionECAL":  r'JES Single $\pi$ ECAL',
     "jesSinglePionHCAL":  r'JES Single $\pi$ HCAL',
     "jesFragmentation":   r'JES Fragmentation',
@@ -51,12 +51,19 @@ conv_names = {
     "eleReco":  r'$e$ reco.',
     "eleTrig":  r'$e$ trig.',
     "pileup": r'Pileup',
-    "lumi": r'Lumi.',
+    "lumi":   r'Lumi.',
+    "d1k_qcd":  r'$\delta^{(1)}K_{\rm QCD}$',
+    "d2k_qcd":  r'$\delta^{(2)}K_{\rm QCD}$',
+    "d3k_qcd":  r'$\delta^{(3)}K_{\rm QCD}$',
     "d1k_ew":   r'$\delta^{(1)}\kappa_{\rm{EW}}$',
     "d2k_ew_w": r'$\delta^{(2)}\kappa_{\rm{EW}}^{\rm{W}}$',
     "d2k_ew_z": r'$\delta^{(2)}\kappa_{\rm{EW}}^{\rm{Z}}$',
     "d3k_ew_w": r'$\delta^{(3)}\kappa_{\rm{EW}}^{\rm{W}}$',
     "d3k_ew_z": r'$\delta^{(3)}\kappa_{\rm{EW}}^{\rm{Z}}$',
+    "dk_mix":   r'$\delta K_{\rm mix}$',
+    "lhePdf":   r'PDF variations',
+    "lheScale": r'Scale variations',
+    "qcdSyst":  r'QCD Syst.',
     "prop_binmonojet_bin0": r'MC stat. monojet bin 0',
     "prop_binmonojet_bin1": r'MC stat. monojet bin 1',
     "prop_binmonojet_bin2": r'MC stat. monojet bin 2',
@@ -183,7 +190,7 @@ def draw_labels(axis, names):
         axis.text(0.05, idx+0.5, str(len(names)-idx),
                   weight='bold', va='center', fontsize=fontsize)
         try:
-            name = conv_names[names[idx]]
+            name = conv_names.get(names[idx], names[idx])
         except KeyError:
             name = names[idx].replace("_", "")
         axis.text(0.25, idx+0.5, name, va='center', fontsize=fontsize)
@@ -219,10 +226,7 @@ def draw_odd_boxes(axis):
     return axis
 
 def draw_impacts(poi, names, nuisances, impacts, bestfit, output):
-    try:
-        name = conv_names[poi]
-    except KeyError:
-        name = name.replace("_", "")
+    name = conv_names.get(poi, poi.replace("_", " "))
     print("{} = {} -{} +{}".format(name,
                                    bestfit[0],
                                    bestfit[0]-bestfit[1],
@@ -256,13 +260,14 @@ def draw_impacts(poi, names, nuisances, impacts, bestfit, output):
     # Middle axis
     draw_errorbar(axm, nuisances)
     axm.set_xlim((-2.9, 2.9))
+    #axm.set_xlim(-1, 1)
     axm.set_xlabel(r'$(\hat{\theta}-\theta_0)/\Delta\theta$', fontsize='large')
 
     # Right axis
     draw_barhs(axr, impacts)
     xmax = np.abs(axr.get_xlim()).max()
     axr.set_xlim((-xmax, xmax))
-    axr.set_xlabel(conv_names["dhat_"+poi], fontsize='large')
+    axr.set_xlabel(conv_names.get("dhat_"+poi, "dhat poi"), fontsize='large')
 
     # Middle axis - Ticks
     axm.xaxis.set_major_locator(MultipleLocator(1))
@@ -299,7 +304,7 @@ def draw_impacts(poi, names, nuisances, impacts, bestfit, output):
 
     # best fit stamp
     axr.text(1, 1,
-             conv_names["hat_"+poi]+r'$ = {:.3f}^{{+{:.3f}}}_{{-{:.3f}}}$'.format(
+             conv_names.get("hat_"+poi, "hat poi")+r'$ = {:.3f}^{{+{:.3f}}}_{{-{:.3f}}}$'.format(
                  bestfit[0], bestfit[2]-bestfit[0], bestfit[0]-bestfit[1],
              ), ha='right', va='bottom', transform=axr.transAxes,
              fontsize='large')

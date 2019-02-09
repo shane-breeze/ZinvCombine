@@ -29,7 +29,7 @@ def draw(df, output):
             margin_titles=True, legend_out=True,
         )
         g.map(plt.step, "bins", "count", where='post').add_legend()
-        #g.set(xlim=(0, 1000), ylim=(0.8, 1.2))
+        g.set(ylim=(0.5, 1.5))
 
         #g.fig.text(0.0, 1, r'$\mathbf{CMS}\ \mathit{Preliminary}$',
         #           ha='left', va='bottom', fontsize='large')
@@ -71,6 +71,10 @@ def create_df(path):
                 bins = nominal.index.get_level_values(process.replace(";1", "")).values
 
                 for systname in systnames:
+
+                    if systname.replace(";1", "Up;1") not in f[region].keys()\
+                       or systname.replace(";1", "Down;1") not in f[region].keys():
+                        continue
 
                     if process not in f[region][systname.replace(";1", "Up;1")].keys()\
                        or process not in f[region][systname.replace(";1", "Down;1")].keys():
