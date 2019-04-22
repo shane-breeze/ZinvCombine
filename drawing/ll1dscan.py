@@ -31,6 +31,10 @@ def main():
     poi_exp = arrays_exp[poi_name][1:]
     nll_exp = 2*arrays_exp["deltaNLL"][1:]
 
+    sorter = np.argsort(poi_exp)
+    poi_exp = poi_exp[sorter]
+    nll_exp = nll_exp[sorter]
+
     fig, ax = plt.subplots(
         nrows=1, ncols=1,
         figsize = (4.8, 4.8),

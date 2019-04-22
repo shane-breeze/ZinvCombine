@@ -10,6 +10,8 @@ def parse_args():
     parser.add_argument("ftoy", type=str, help="File with toy result")
     parser.add_argument("--xlabel", type=str, default=r'$-2\ln\lambda$',
                         help="X-axis label")
+    parser.add_argument("-n", "--nbins", type=int, default=50,
+                        help="Number of bins")
     parser.add_argument("-o", "--output", type=str, default="gof.pdf",
                         help="Output file")
 
@@ -21,9 +23,8 @@ def read_limit(filename):
         limits = tree.array("limit")
     return limits
 
-def draw_test_stat(toys, gof_obs, pvalue, xlabel, output):
-    nbins = 50
-    width = gof_obs / int(50 * gof_obs / toys.max())
+def draw_test_stat(toys, gof_obs, pvalue, xlabel, nbins, output):
+    width = gof_obs / int(nbins * gof_obs / toys.max())
     bins = np.arange(0., toys.max(), width)
 
     fig, ax = plt.subplots()
@@ -47,6 +48,7 @@ def draw_test_stat(toys, gof_obs, pvalue, xlabel, output):
     ax.legend(handles, labels)
 
     print("Creating {}".format(output))
+    print("p-value = {:.3f}".format(pvalue))
     fig.savefig(output, format="pdf", bbox_inches="tight")
     plt.close(fig)
 
@@ -60,7 +62,7 @@ def main():
     ntotal = toys.shape[0]
     pvalue = float(nabove) / ntotal
 
-    draw_test_stat(toys, gof_obs, pvalue, options.xlabel, options.output)
+    draw_test_stat(toys, gof_obs, pvalue, options.xlabel, options.nbins, options.output)
 
 if __name__ == "__main__":
     main()
