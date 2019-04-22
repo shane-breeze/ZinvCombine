@@ -11,9 +11,9 @@ import re
 import uproot
 
 conv_names = {
-    "metTrigSF":   r'$E_{\rm{T}}^{\rm{miss}}$ trig.',
-    "metTrigSyst": r'$E_{\rm{T}}^{\rm{miss}}$ trig. syst.',
-    "metTrigStat": r'$E_{\rm{T}}^{\rm{miss}}$ trig. stat.',
+    "metTrigSF":   r'$p_{\rm{T}}^{\rm{miss}}$ trig.',
+    "metTrigSyst": r'$p_{\rm{T}}^{\rm{miss}}$ trig. syst.',
+    "metTrigStat": r'$p_{\rm{T}}^{\rm{miss}}$ trig. stat.',
     "stat":     r'Stat.',
     "jesTotal": r'JES',
     "jer":      r'JER',
@@ -44,13 +44,18 @@ conv_names = {
     "jesPileUpPtEC2":     r'JES PU $p_{\rm{T}}$ EC2',
     "jesPileUpPtHF":      r'JES PU $p_{\rm{T}}$ HF',
     "jesPileUpPtRef":     r'JES PU $p_{\rm{T}}$ Ref.',
+    "muonPtScale":       r'$\mu$ $p_{\mathrm{T}}$ scale',
+    "eleEnergyScale":    r'$e$ energy scale',
+    "photonEnergyScale": r'$\gamma$ energy scale',
     "muonId":    r'$\mu$ id.',
     "muonIso":   r'$\mu$ iso.',
     "muonTrack": r'$\mu$ track.',
     "eleIdIso": r'$e$ id. iso.',
     "eleReco":  r'$e$ reco.',
     "eleTrig":  r'$e$ trig.',
+    "tauId": r'$\tau$ id.',
     "pileup": r'Pileup',
+    "prefiring": r'Prefiring',
     "lumi":   r'Lumi.',
     "d1k_qcd":  r'$\delta^{(1)}K_{\rm QCD}$',
     "d2k_qcd":  r'$\delta^{(2)}K_{\rm QCD}$',
@@ -63,58 +68,74 @@ conv_names = {
     "dk_mix":   r'$\delta K_{\rm mix}$',
     "lhePdf":   r'PDF variations',
     "lheScale": r'Scale variations',
-    "qcdSyst":  r'QCD Syst.',
-    "prop_binmonojet_bin0": r'MC stat. monojet bin 0',
-    "prop_binmonojet_bin1": r'MC stat. monojet bin 1',
-    "prop_binmonojet_bin2": r'MC stat. monojet bin 2',
-    "prop_binmonojet_bin3": r'MC stat. monojet bin 3',
-    "prop_binmonojet_bin4": r'MC stat. monojet bin 4',
-    "prop_binmonojet_bin5": r'MC stat. monojet bin 5',
-    "prop_binmonojet_bin6": r'MC stat. monojet bin 6',
-    "prop_binmonojet_bin7": r'MC stat. monojet bin 7',
-    "prop_binmonojet_bin8": r'MC stat. monojet bin 8',
-    "prop_binsinglemu_bin0": r'MC stat. singlemu bin 0',
-    "prop_binsinglemu_bin1": r'MC stat. singlemu bin 1',
-    "prop_binsinglemu_bin2": r'MC stat. singlemu bin 2',
-    "prop_binsinglemu_bin3": r'MC stat. singlemu bin 3',
-    "prop_binsinglemu_bin4": r'MC stat. singlemu bin 4',
-    "prop_binsinglemu_bin5": r'MC stat. singlemu bin 5',
-    "prop_binsinglemu_bin6": r'MC stat. singlemu bin 6',
-    "prop_binsinglemu_bin7": r'MC stat. singlemu bin 7',
-    "prop_binsinglemu_bin8": r'MC stat. singlemu bin 8',
-    "prop_bindoublemu_bin0": r'MC stat. doublemu bin 0',
-    "prop_bindoublemu_bin1": r'MC stat. doublemu bin 1',
-    "prop_bindoublemu_bin2": r'MC stat. doublemu bin 2',
-    "prop_bindoublemu_bin3": r'MC stat. doublemu bin 3',
-    "prop_bindoublemu_bin4": r'MC stat. doublemu bin 4',
-    "prop_bindoublemu_bin5": r'MC stat. doublemu bin 5',
-    "prop_bindoublemu_bin6": r'MC stat. doublemu bin 6',
-    "prop_bindoublemu_bin7": r'MC stat. doublemu bin 7',
-    "prop_bindoublemu_bin8": r'MC stat. doublemu bin 8',
-    "prop_binsingleele_bin0": r'MC stat. singleele bin 0',
-    "prop_binsingleele_bin1": r'MC stat. singleele bin 1',
-    "prop_binsingleele_bin2": r'MC stat. singleele bin 2',
-    "prop_binsingleele_bin3": r'MC stat. singleele bin 3',
-    "prop_binsingleele_bin4": r'MC stat. singleele bin 4',
-    "prop_binsingleele_bin5": r'MC stat. singleele bin 5',
-    "prop_binsingleele_bin6": r'MC stat. singleele bin 6',
-    "prop_binsingleele_bin7": r'MC stat. singleele bin 7',
-    "prop_binsingleele_bin8": r'MC stat. singleele bin 8',
-    "prop_bindoubleele_bin0": r'MC stat. doubleele bin 0',
-    "prop_bindoubleele_bin1": r'MC stat. doubleele bin 1',
-    "prop_bindoubleele_bin2": r'MC stat. doubleele bin 2',
-    "prop_bindoubleele_bin3": r'MC stat. doubleele bin 3',
-    "prop_bindoubleele_bin4": r'MC stat. doubleele bin 4',
-    "prop_bindoubleele_bin5": r'MC stat. doubleele bin 5',
-    "prop_bindoubleele_bin6": r'MC stat. doubleele bin 6',
-    "prop_bindoubleele_bin7": r'MC stat. doubleele bin 7',
-    "prop_bindoubleele_bin8": r'MC stat. doubleele bin 8',
-    "tf_wlnu": r'$t_{\rm{W}}$',
+    "lheScale_gstar": r'Scale variations ($\gamma^{*}$)',
+    "lheScale_zonly": r'Scale variations ($Z$)',
+    "kzll_mcstat": r'$k_{\mathrm{Z}}$ MC stat.',
+    "kgll_mcstat": r'$k_{\gamma^{*}}$ MC stat.',
+    "qcdSyst":     r'QCD Syst.',
+    "qcdSystBin0": r'QCD Syst. (0)',
+    "qcdSystBin1": r'QCD Syst. (1)',
+    "qcdSystBin2": r'QCD Syst. (2)',
+    "qcdSystBin3": r'QCD Syst. (3)',
+    "qcdSystBin4": r'QCD Syst. (4)',
+    "qcdSystBin5": r'QCD Syst. (5)',
+    "qcdSystBin6": r'QCD Syst. (6)',
+    "qcdSystBin7": r'QCD Syst. (7)',
+    "qcdSystBin8": r'QCD Syst. (8)',
+    #"prop_binmonojet_bin0": r'MC stat. monojet bin 0',
+    #"prop_binmonojet_bin1": r'MC stat. monojet bin 1',
+    #"prop_binmonojet_bin2": r'MC stat. monojet bin 2',
+    #"prop_binmonojet_bin3": r'MC stat. monojet bin 3',
+    #"prop_binmonojet_bin4": r'MC stat. monojet bin 4',
+    #"prop_binmonojet_bin5": r'MC stat. monojet bin 5',
+    #"prop_binmonojet_bin6": r'MC stat. monojet bin 6',
+    #"prop_binmonojet_bin7": r'MC stat. monojet bin 7',
+    #"prop_binmonojet_bin8": r'MC stat. monojet bin 8',
+    #"prop_binsinglemu_bin0": r'MC stat. singlemu bin 0',
+    #"prop_binsinglemu_bin1": r'MC stat. singlemu bin 1',
+    #"prop_binsinglemu_bin2": r'MC stat. singlemu bin 2',
+    #"prop_binsinglemu_bin3": r'MC stat. singlemu bin 3',
+    #"prop_binsinglemu_bin4": r'MC stat. singlemu bin 4',
+    #"prop_binsinglemu_bin5": r'MC stat. singlemu bin 5',
+    #"prop_binsinglemu_bin6": r'MC stat. singlemu bin 6',
+    #"prop_binsinglemu_bin7": r'MC stat. singlemu bin 7',
+    #"prop_binsinglemu_bin8": r'MC stat. singlemu bin 8',
+    #"prop_bindoublemu_bin0": r'MC stat. doublemu bin 0',
+    #"prop_bindoublemu_bin1": r'MC stat. doublemu bin 1',
+    #"prop_bindoublemu_bin2": r'MC stat. doublemu bin 2',
+    #"prop_bindoublemu_bin3": r'MC stat. doublemu bin 3',
+    #"prop_bindoublemu_bin4": r'MC stat. doublemu bin 4',
+    #"prop_bindoublemu_bin5": r'MC stat. doublemu bin 5',
+    #"prop_bindoublemu_bin6": r'MC stat. doublemu bin 6',
+    #"prop_bindoublemu_bin7": r'MC stat. doublemu bin 7',
+    #"prop_bindoublemu_bin8": r'MC stat. doublemu bin 8',
+    #"prop_binsingleele_bin0": r'MC stat. singleele bin 0',
+    #"prop_binsingleele_bin1": r'MC stat. singleele bin 1',
+    #"prop_binsingleele_bin2": r'MC stat. singleele bin 2',
+    #"prop_binsingleele_bin3": r'MC stat. singleele bin 3',
+    #"prop_binsingleele_bin4": r'MC stat. singleele bin 4',
+    #"prop_binsingleele_bin5": r'MC stat. singleele bin 5',
+    #"prop_binsingleele_bin6": r'MC stat. singleele bin 6',
+    #"prop_binsingleele_bin7": r'MC stat. singleele bin 7',
+    #"prop_binsingleele_bin8": r'MC stat. singleele bin 8',
+    #"prop_bindoubleele_bin0": r'MC stat. doubleele bin 0',
+    #"prop_bindoubleele_bin1": r'MC stat. doubleele bin 1',
+    #"prop_bindoubleele_bin2": r'MC stat. doubleele bin 2',
+    #"prop_bindoubleele_bin3": r'MC stat. doubleele bin 3',
+    #"prop_bindoubleele_bin4": r'MC stat. doubleele bin 4',
+    #"prop_bindoubleele_bin5": r'MC stat. doubleele bin 5',
+    #"prop_bindoubleele_bin6": r'MC stat. doubleele bin 6',
+    #"prop_bindoubleele_bin7": r'MC stat. doubleele bin 7',
+    #"prop_bindoubleele_bin8": r'MC stat. doubleele bin 8',
+    "rw": r'$r_{\rm{W}}$',
     "r": r'$r$',
-    "hat_tf_wlnu": r'$\hat{t}_{\rm{W}}$',
+    "rqcd": r'$r_{\mathrm{qcd}}$',
+    "hat_rw": r'$\hat{r}_{\rm{W}}$',
     "hat_r": r'$\hat{r}$',
-    "dhat_tf_wlnu": r'$\Delta\hat{t}_{\rm{W}}$',
+    "hat_rqcd": r'$\hat{r}_{\mathrm{qcd}}$',
+    "dhat_rw": r'$\Delta\hat{r}_{\rm{W}}$',
     "dhat_r": r'$\Delta\hat{r}$',
+    "dhat_rqcd": r'$\Delta\hat{r}_{\mathrm{qcd}}$',
 }
 
 def parse_args():
@@ -122,6 +143,8 @@ def parse_args():
 
     parser.add_argument("results_dir", type=str,
                         help="Directory with the desired results")
+    parser.add_argument("initial_fit", type=str,
+                        help="Path to initial fit file")
     parser.add_argument("-n", "--name", type=str, default="Exp",
                         help="String to add to regex")
     parser.add_argument("-o", "--output", type=str, default="impacts.pdf",
@@ -137,23 +160,21 @@ def get_fit_result(path, param):
     try:
         limit = uproot.open(path)["limit"]
     except KeyError:
-        assert KeyError(path)
+        raise KeyError(path)
     if limit.numentries == 0:
         return np.array([1., 1., 1.])
     if param not in limit.keys():
         assert KeyError(path)
     return limit.array(param)
 
-def get_fit_results(poi, results_dir, regex_initial_fit, regex_param_fit, regex_param):
+def get_fit_results(poi, results_dir, initial_fit_file, regex_param_fit, regex_param):
     names = []
     nuisances = []
     impacts = []
 
+    poi_nominal_fit = get_fit_result(initial_fit_file, poi)
     for path in glob.glob(os.path.join(results_dir, "*.root")):
-        if regex_initial_fit.search(path):
-            poi_nominal_fit = get_fit_result(path, poi)
-
-        match = regex_param_fit.search(path)
+        match = regex_param_fit.search(os.path.basename(path))
         if match:
             param = match.group("param")
             if not regex_param.search(param):
@@ -189,10 +210,7 @@ def draw_labels(axis, names):
     for idx in range(len(names)):
         axis.text(0.05, idx+0.5, str(len(names)-idx),
                   weight='bold', va='center', fontsize=fontsize)
-        try:
-            name = conv_names.get(names[idx], names[idx])
-        except KeyError:
-            name = names[idx].replace("_", "")
+        name = conv_names.get(names[idx], names[idx].replace("_", ""))
         axis.text(0.25, idx+0.5, name, va='center', fontsize=fontsize)
     return axis
 
@@ -235,7 +253,9 @@ def draw_impacts(poi, names, nuisances, impacts, bestfit, output):
         "nuisance": names,
         "down_impact [%]": impacts[:,0],
         "up_impact [%]": impacts[:,1],
-    })
+        "down_const": nuisances[:,1],
+        "up_const": nuisances[:,2],
+    }, columns=["nuisance", "down_impact [%]", "up_impact [%]", "down_const", "up_const"])
     df = df.set_index("nuisance")
     print(100.*df/bestfit[0])
 
@@ -267,7 +287,7 @@ def draw_impacts(poi, names, nuisances, impacts, bestfit, output):
     draw_barhs(axr, impacts)
     xmax = np.abs(axr.get_xlim()).max()
     axr.set_xlim((-xmax, xmax))
-    axr.set_xlabel(conv_names.get("dhat_"+poi, "dhat poi"), fontsize='large')
+    axr.set_xlabel(conv_names.get("dhat_"+poi, poi), fontsize='large')
 
     # Middle axis - Ticks
     axm.xaxis.set_major_locator(MultipleLocator(1))
@@ -304,7 +324,7 @@ def draw_impacts(poi, names, nuisances, impacts, bestfit, output):
 
     # best fit stamp
     axr.text(1, 1,
-             conv_names.get("hat_"+poi, "hat poi")+r'$ = {:.3f}^{{+{:.3f}}}_{{-{:.3f}}}$'.format(
+             conv_names.get("hat_"+poi, poi)+r'$ = {:.3f}^{{+{:.3f}}}_{{-{:.3f}}}$'.format(
                  bestfit[0], bestfit[2]-bestfit[0], bestfit[0]-bestfit[1],
              ), ha='right', va='bottom', transform=axr.transAxes,
              fontsize='large')
@@ -318,14 +338,13 @@ def main():
     options = parse_args()
     poi_name = options.poi
 
-    regex_initial_fit = re.compile("higgsCombine.*NominalFit{}\.MultiDimFit\.mH120\.root".format(options.name))
-    regex_param_fit = re.compile("higgsCombine.*NuisFit{}_(?P<param>[^.]*)\.MultiDimFit\.mH120\.root".format(options.name))
+    regex_param_fit = re.compile("higgsCombine_paramFit_{}_(?P<param>[^.]*)\.MultiDimFit\.mH91\.root".format(options.name))
     regex_param = re.compile(options.regex)
 
     names, nuisances, impacts, bestfit = get_fit_results(
         poi_name,
         options.results_dir,
-        regex_initial_fit,
+        options.initial_fit,
         regex_param_fit,
         regex_param,
     )
